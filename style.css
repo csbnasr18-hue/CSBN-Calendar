@@ -1,0 +1,289 @@
+/* ============================================================
+   [1] LAYOUT & CORE SETUP
+   ============================================================ */
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    margin: 0; 
+    display: flex; 
+    height: 100vh; 
+    width: 100vw; 
+    overflow: hidden; 
+    background: #f1f5f9; 
+}
+
+.main-content { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+/* ============================================================
+   [2] HEADER & LOGO CONFIGURATION
+   ============================================================ */
+.calendar-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px 20px; 
+    background: #252a16; 
+    border-bottom: 1px solid #cbd5e1; 
+    height: 70px; 
+}
+
+.header-logo-container { 
+    width: 150px; 
+    height: 150px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.nav-logo { 
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain; 
+}
+
+.header-center-controls { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.nav-controls { display: flex; align-items: center; }
+.jump-controls { display: flex; gap: 5px; margin: 0 10px; }
+
+#jumpMonth, #jumpYear { 
+    padding: 5px; 
+    border: 1px solid #cbd5e1; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    height: 32px; 
+}
+
+/* ============================================================
+   [3] SIDEBAR & LOGO CENTERING
+   ============================================================ */
+.sidebar { 
+    width: 320px; 
+    min-width: 320px; 
+    background: #fff; 
+    border-right: 1px solid #cbd5e1; 
+    padding: 20px; 
+    overflow-y: auto; 
+    box-sizing: border-box; 
+    transition: all 0.3s ease; 
+}
+
+/* Centering Logic for Sidebar Logo */
+.sidebar-logo-container {
+    width: 60%;
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo { 
+    color: #1e40af; 
+    font-size: 1.2rem; 
+    font-weight: 800; 
+    text-align: center; 
+    margin: 0; /* Let container handle spacing */
+}
+
+.sidebar.closed { 
+    width: 0; min-width: 0; padding: 0; margin: 0; opacity: 0; pointer-events: none; 
+}
+
+/* ============================================================
+   [4] FORM ELEMENTS
+   ============================================================ */
+h3 { 
+    font-size: 0.8rem; 
+    color: #475569; 
+    text-transform: uppercase; 
+    margin-bottom: 10px; 
+    border-left: 3px solid #2563eb; 
+    padding-left: 8px; 
+}
+
+.field { margin-bottom: 10px; }
+
+label { 
+    display: block; font-size: 0.7rem; font-weight: bold; color: #64748b; margin-bottom: 2px; 
+}
+
+input, select { 
+    width: 100%; height: 32px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0 8px; box-sizing: border-box; 
+}
+
+.scroll-list { 
+    border: 1px solid #cbd5e1; border-radius: 4px; max-height: 120px; overflow-y: auto; background: #f8fafc; 
+}
+
+.item-row { 
+    display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; font-size: 0.75rem; 
+}
+
+/* ============================================================
+   [5] CALENDAR GRID 
+   ============================================================ */
+.calendar-container { 
+    flex: 1; 
+    overflow-y: scroll; 
+    padding: 0 20px 20px 20px; 
+    background: #252a16; 
+    position: relative; 
+}
+
+.calendar-grid { 
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; 
+}
+
+.day-header { 
+    font-weight: bold; 
+    text-align: center; 
+    color: #c2b280; 
+    background: #4b5320; 
+    padding: 15px 0; 
+    position: sticky; 
+    top: 0; 
+    z-index: 10; 
+    border-bottom: 2px solid #1a1c12; 
+}
+
+.day { 
+    background: #2d3319; 
+    border-radius: 4px; 
+    padding: 12px; 
+    border: 1px solid #4b5320; 
+    min-height: 200px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.day b { font-size: 1.2rem; margin-bottom: 8px; color: #c2b280; }
+
+/* ============================================================
+   [6] EVENT CARDS & EQUIPMENT TAGS
+   ============================================================ */
+.cal-event { 
+    background: #4b5320; 
+    border-left: 4px solid #c2b280; 
+    color: #fff; 
+    padding: 8px; 
+    margin-top: 6px; 
+    border-radius: 2px; 
+    position: relative; 
+    font-size: 0.85rem; 
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+}
+
+.cal-event span { 
+    background: #c2b280 !important; 
+    color: #1a1c12 !important; 
+    padding: 1px 5px; 
+    border-radius: 3px; 
+    font-size: 0.7rem; 
+    font-weight: bold; 
+    margin-right: 3px; 
+    margin-top: 4px; 
+    display: inline-block; 
+    border: 1px solid #353b1a; 
+}
+
+.event-staff { 
+    display: block; 
+    font-size: 0.75rem; 
+    color: #c2b280; 
+    margin-top: 6px; 
+    border-top: 1px dashed #c2b280; 
+    padding-top: 4px; 
+    font-weight: 600; 
+}
+
+.delete-event { 
+    position: absolute; top: 2px; right: 4px; color: #ff4d4d; border: none; background: none; cursor: pointer; font-weight: bold; 
+}
+
+/* ============================================================
+   [7] BUTTONS & ACTION ELEMENTS
+   ============================================================ */
+.primary-btn { width: 100%; height: 38px; background: #2563eb; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+.excel-btn { width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+.backup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+.small-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+.clear-btn { width: 100%; margin-top: 8px; border: 1px solid #ef4444; color: #ef4444; background: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.toggle-btn { background: #1e293b; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+.stock-btn { background: #10b981; color: white; border: none; border-radius: 4px; padding: 0 10px; cursor: pointer; }
+.divider { border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0; }
+
+/* ============================================================
+   [8] SIDEBAR CHECKBOX FIX
+   ============================================================ */
+input[type="checkbox"].item-check { 
+    width: 16px !important; 
+    height: 16px !important; 
+    cursor: pointer; 
+    margin: 0; 
+    vertical-align: middle; 
+}
+
+.item-row label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   [9] SIDEBAR SECURITY STYLES
+   ============================================================ */
+.sidebar.locked {
+    position: relative;
+}
+
+/* Blurs the content behind the lock */
+.sidebar.locked .sidebar-section, 
+.sidebar.locked .action-group,
+.sidebar.locked .sidebar-logo-container,
+.sidebar.locked hr {
+    filter: blur(10px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lock-box {
+    text-align: center;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 1px solid #cbd5e1;
+}
+
+.lock-box span {
+    display: block;
+    font-weight: bold;
+    color: #1e40af;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}

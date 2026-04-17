@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSBN Calendar Of Activities</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7qXaU8pSHxzPmg1an5TXhHS-kPtOy5Qs",
+    authDomain: "csbn-calendar.firebaseapp.com",
+    projectId: "csbn-calendar",
+    storageBucket: "csbn-calendar.firebasestorage.app",
+    messagingSenderId: "923688501668",
+    appId: "1:923688501668:web:01420f2f9f63bedf058131",
+    measurementId: "G-75X863BRFD"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+    <div class="sidebar locked" id="sidebar">
+        <div id="sidebarLockOverlay" class="lock-overlay">
+            <div class="lock-box">
+                <span>🔒 Sidebar Locked</span>
+                <button onclick="unlockSidebar()" class="primary-btn" style="margin-top:10px;">Unlock Access</button>
+            </div>
+        </div>
+
+        <div class="sidebar-logo-container">
+            <img src="CSBN, SR, PA.png" alt="Left Logo" class="nav-logo">
+            <h1 class="logo">CSBN Calendar Of Activities</h1>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Booking Details</h3>
+            <div class="field"><label>Interaction</label><select id="inputType"><option>📞 Call</option><option>📩 Message</option><option>🗣️ Verbal</option></select></div>
+            <div class="field"><label>Date</label><input type="date" id="eventDate"></div>
+            <div class="field"><label>Project Name</label><input type="text" id="eventName" placeholder="Project Name"></div>
+            <div class="field"><label>Personnel In-Charge</label><input type="text" id="personnel" placeholder="Staff Name"></div>
+            <div class="field"><label>Equipment Needed</label><div id="equipmentSelector" class="scroll-list"></div></div>
+            <button class="primary-btn" id="addBtn">Save Booking</button>
+        </div>
+
+        <hr class="divider">
+
+        <div class="sidebar-section">
+            <h3>Inventory</h3>
+            <div class="field">
+                <input type="text" id="newInvName" placeholder="Item Name">
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <input type="number" id="newInvQty" placeholder="Qty" min="1">
+                    <button id="addInvBtn" class="stock-btn">Add</button>
+                </div>
+            </div>
+            <div id="masterInventoryList" class="scroll-list"></div>
+        </div>
+
+        <div class="action-group">
+            <button class="excel-btn" id="excelBtn">📊 Export to Excel</button>
+            <div class="backup-row">
+                <button class="small-btn" id="backupBtn">📥 Backup</button>
+                <button class="small-btn" id="restoreBtn">📤 Restore</button>
+                <input type="file" id="fileInput" style="display:none" accept=".json">
+            </div>
+            <button class="clear-btn" id="clearBtn">⚠️ Wipe All Data</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="calendar-header">
+            <div class="header-logo-container">
+                <img src="CSBN, SR, PA.png" alt="Left Logo" class="nav-logo">
+            </div>
+
+            <div class="header-center-controls">
+                <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
+                <div class="nav-controls">
+                    <button id="prevMonth">←</button>
+                    <div class="jump-controls">
+                        <select id="jumpMonth"></select>
+                        <select id="jumpYear"></select>
+                    </div>
+                    <button id="nextMonth">→</button>
+                </div>
+            </div>
+
+            <div class="header-logo-container">
+                <img src="CSBN, SR, PA.png" alt="Right Logo" class="nav-logo">
+            </div>
+        </div>
+        <div class="calendar-container">
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
