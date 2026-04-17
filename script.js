@@ -1,14 +1,15 @@
 // ============================================================
-// [1] FIREBASE CONFIGURATION
+// [1] FIREBASE CONFIGURATION (Your Specific Keys)
 // ============================================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB7qXaU8pSHxzPmg1an5TXhHS-kPtOy5Qs",
+  authDomain: "csbn-calendar.firebaseapp.com",
+  databaseURL: "https://csbn-calendar-default-rtdb.firebaseio.com",
+  projectId: "csbn-calendar",
+  storageBucket: "csbn-calendar.firebasestorage.app",
+  messagingSenderId: "923688501668",
+  appId: "1:923688501668:web:01420f2f9f63bedf058131",
+  measurementId: "G-75X863BRFD"
 };
 
 // Initialize Firebase
@@ -73,7 +74,6 @@ function toggleSidebar() {
 
     sidebar.classList.toggle('closed'); 
 
-    // Auto-lock when closed
     if (isClosing) {
         sidebar.classList.add('locked');
         document.getElementById('sidebarLockOverlay').style.display = 'flex';
