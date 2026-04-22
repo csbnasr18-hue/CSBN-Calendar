@@ -1,18 +1,16 @@
 // ============================================================
-// [1] FIREBASE CONFIGURATION (Your Specific Keys)
+// [1] FIREBASE CONFIGURATION
 // ============================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyB7qXaU8pSHxzPmg1an5TXhHS-kPtOy5Qs",
-  authDomain: "csbn-calendar.firebaseapp.com",
-  databaseURL: "https://csbn-calendar-default-rtdb.firebaseio.com",
-  projectId: "csbn-calendar",
-  storageBucket: "csbn-calendar.firebasestorage.app",
-  messagingSenderId: "923688501668",
-  appId: "1:923688501668:web:01420f2f9f63bedf058131",
-  measurementId: "G-75X863BRFD"
+    apiKey: "AIzaSyB7qXaU8pSHxzPmg1an5TXhHS-kPtOy5Qs",
+    authDomain: "csbn-calendar.firebaseapp.com",
+    projectId: "csbn-calendar",
+    storageBucket: "csbn-calendar.firebasestorage.app",
+    messagingSenderId: "923688501668",
+    appId: "1:923688501668:web:01420f2f9f63bedf058131",
+    measurementId: "G-75X863BRFD"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
@@ -71,7 +69,6 @@ function unlockSidebar() {
 function toggleSidebar() { 
     const sidebar = document.getElementById('sidebar');
     const isClosing = !sidebar.classList.contains('closed');
-
     sidebar.classList.toggle('closed'); 
 
     if (isClosing) {
@@ -128,8 +125,12 @@ function renderCalendar() {
     if(jumpYear) jumpYear.value = currentView.getFullYear();
     
     grid.innerHTML = '';
-    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(d => {
-        const h = document.createElement('div'); h.className = 'day-header'; h.innerText = d; grid.appendChild(h);
+    
+    ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'].forEach(d => {
+        const h = document.createElement('div'); 
+        h.className = 'day-header'; 
+        h.innerText = d; 
+        grid.appendChild(h);
     });
 
     const year = currentView.getFullYear();
@@ -141,12 +142,30 @@ function renderCalendar() {
     
     for(let d=1; d<=daysInMonth; d++) {
         const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const box = document.createElement('div'); box.className = 'day'; box.innerHTML = `<b>${d}</b>`;
+        const box = document.createElement('div'); 
+        box.className = 'day'; 
+        box.innerHTML = `<div class="day-number">${d}</div>`;
         
         bookings.filter(b => b.date === dateStr).forEach(b => {
-            const card = document.createElement('div'); card.className = 'cal-event';
+            const card = document.createElement('div'); 
+            card.className = 'cal-event';
+            
+            // REMOVED THE "x" - Now displays as "3 MIC"
             const tags = b.items.map(i => `<span>${i.qty} ${i.name}</span>`).join(' ');
-            card.innerHTML = `<button class="delete-event" onclick="removeBooking(${b.id})">&times;</button><b>${b.type}</b><div>${b.name}</div>${tags}<span class="event-staff">👤 ${b.staff}</span>`;
+            
+            card.innerHTML = `
+                <button class="delete-event" onclick="removeBooking(${b.id})">&times;</button>
+                <div style="color: #c2b280; text-transform: uppercase; font-size: 0.65rem; font-weight: bold; margin-bottom: 2px;">${b.type}</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #fff; line-height: 1.2;">${b.name}</div>
+                
+                <div class="event-details-box" style="margin: 6px 0; padding: 4px 0;">
+                    <div style="font-size: 0.8rem;">🕒 <b>${b.time}H</b></div>
+                    <div style="font-size: 0.8rem;">📍 <b>${b.location}</b></div>
+                </div>
+
+                <div style="margin-bottom: 8px;">${tags}</div>
+                <div class="event-staff" style="color: #c2b280; font-size: 0.75rem; font-weight: bold; border-top: 1px dashed rgba(194, 178, 128, 0.4); padding-top: 4px;">👤 ${b.staff}</div>
+            `;
             box.appendChild(card);
         });
         grid.appendChild(box);
@@ -186,8 +205,12 @@ document.getElementById('addBtn').onclick = () => {
     const date = document.getElementById('eventDate').value;
     const staff = document.getElementById('personnel').value;
     const type = document.getElementById('inputType').value;
-    const selected = [];
     
+    // CAPTURING TIME FROM INPUT (BROWSER DEFAULTS TO 24H VALUE)
+    const time = document.getElementById('eventTime').value;
+    const location = document.getElementById('eventLocation').value;
+
+    const selected = [];
     document.querySelectorAll('#equipmentSelector .item-row').forEach(row => {
         const cb = row.querySelector('.item-check');
         const qty = row.querySelector('.qty-input');
@@ -196,18 +219,30 @@ document.getElementById('addBtn').onclick = () => {
 
     if(!name || !date || selected.length === 0) return alert("Fill all fields and select items.");
     
-    bookings.push({ id: Date.now(), name, date, staff, type, items: selected });
+    bookings.push({ 
+        id: Date.now(), 
+        name, 
+        date, 
+        staff, 
+        type, 
+        time, // Saved as "HH:mm" (Military)
+        location, 
+        items: selected 
+    });
+    
     saveAll();
     
     document.getElementById('eventName').value = '';
     document.getElementById('personnel').value = '';
+    document.getElementById('eventTime').value = '';
+    document.getElementById('eventLocation').value = '';
 };
 
 document.getElementById('excelBtn').onclick = () => {
-    let csv = "Date,Project,Type,Staff,Equipment\n";
+    let csv = "Date,Military Time,Location,Project,Type,Staff,Equipment\n";
     bookings.forEach(b => {
         const eq = b.items.map(i => `${i.qty} ${i.name}`).join(" | ");
-        csv += `${b.date},${b.name},${b.type},${b.staff},"${eq}"\n`;
+        csv += `${b.date},${b.time}H,${b.location},${b.name},${b.type},${b.staff},"${eq}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
