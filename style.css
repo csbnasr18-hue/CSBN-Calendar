@@ -26,30 +26,54 @@ body {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 10px 20px; 
+    padding: 0 20px; 
     background: #252a16; 
-    border-bottom: 1px solid #cbd5e1; 
+    border-bottom: 2px solid #3d442a; /* Slightly darker border for better blend */
     height: 70px; 
 }
 
 .header-logo-container { 
-    width: 150px; 
-    height: 150px; 
+    width: 70px;  /* Matches the height to keep the logo square */
+    height: 70px; /* Matches the header height exactly */
     display: flex; 
     justify-content: center; 
     align-items: center; 
+    overflow: hidden; /* Ensures nothing spills out */
 }
 
 .nav-logo { 
-    max-width: 100%; 
-    max-height: 100%; 
+    height: 60px; /* Set a specific height so both logos are identical */
+    width: auto;  /* Maintains the circular aspect ratio */
     object-fit: contain; 
+    padding: 5px; /* Gives the logo a bit of breathing room from the edges */
 }
 
-.header-center-controls { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
+/* Center Controls adjustment to ensure they don't squash the logos */
+.header-center-controls {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 1. Reset both to a base size */
+.nav-logo { 
+    height: 60px; 
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.2s; /* Smooths any changes */
+}
+
+/* 2. Target the RIGHT logo specifically to make it bigger */
+/* This assumes your HTML looks like: <div class="header-logo-container">...</div> */
+/* We target the SECOND container (the one on the right) */
+.header-logo-container:last-child .nav-logo {
+    transform: scale(1.4); /* This 'zooms in' by 40% */
+}
+
+/* 3. Target the LEFT logo if it needs a small boost too */
+.header-logo-container:first-child .nav-logo {
+    transform: scale(1.1); /* Slight boost to match visual weight */
 }
 
 .nav-controls { display: flex; align-items: center; }
@@ -78,7 +102,6 @@ body {
     transition: all 0.3s ease; 
 }
 
-/* Centering Logic for Sidebar Logo */
 .sidebar-logo-container {
     width: 60%;
     display: flex;
@@ -94,7 +117,7 @@ body {
     font-size: 1.2rem; 
     font-weight: 800; 
     text-align: center; 
-    margin: 0; /* Let container handle spacing */
+    margin: 0; 
 }
 
 .sidebar.closed { 
@@ -124,7 +147,7 @@ input, select {
 }
 
 .scroll-list { 
-    border: 1px solid #cbd5e1; border-radius: 4px; max-height: 120px; overflow-y: auto; background: #f8fafc; 
+    border: 1px solid #cbd5e1; border-radius: 4px; height: 120px; overflow-y: auto; background: #f8fafc; 
 }
 
 .item-row { 
@@ -132,30 +155,37 @@ input, select {
 }
 
 /* ============================================================
-   [5] CALENDAR GRID 
+   [5] CALENDAR GRID (BALANCED WIDTH & VISIBLE DATES)
    ============================================================ */
 .calendar-container { 
     flex: 1; 
-    overflow-y: scroll; 
+    overflow-x: auto; 
+    overflow-y: auto; 
     padding: 0 20px 20px 20px; 
     background: #252a16; 
-    position: relative; 
 }
 
 .calendar-grid { 
-    display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; 
+    display: grid; 
+    /* Reduced min-width per column for better navigation */
+    grid-template-columns: repeat(7, minmax(200px, 1fr)); 
+    gap: 12px; 
+    /* Total width is now 1400px instead of 2000px */
+    min-width: 1400px; 
 }
 
 .day-header { 
-    font-weight: bold; 
+    font-weight: 800; 
     text-align: center; 
     color: #c2b280; 
-    background: #4b5320; 
+    background: #1a1c12; 
     padding: 15px 0; 
     position: sticky; 
     top: 0; 
-    z-index: 10; 
-    border-bottom: 2px solid #1a1c12; 
+    z-index: 20; 
+    border-bottom: 3px solid #c2b280;
+    text-transform: uppercase;
+    font-size: 0.85rem;
 }
 
 .day { 
@@ -163,39 +193,61 @@ input, select {
     border-radius: 4px; 
     padding: 12px; 
     border: 1px solid #4b5320; 
-    min-height: 200px; 
+    min-height: 220px; 
     display: flex; 
-    flex-direction: column; 
+    flex-direction: column;
 }
 
-.day b { font-size: 1.2rem; margin-bottom: 8px; color: #c2b280; }
+.day-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: #c2b280; 
+    color: #1a1c12; 
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
 
 /* ============================================================
-   [6] EVENT CARDS & EQUIPMENT TAGS
+   [6] EVENT CARDS (SPACED FOR READABILITY)
    ============================================================ */
 .cal-event { 
     background: #4b5320; 
     border-left: 4px solid #c2b280; 
     color: #fff; 
-    padding: 8px; 
-    margin-top: 6px; 
-    border-radius: 2px; 
+    padding: 12px; 
+    margin-bottom: 10px; 
+    border-radius: 4px; 
     position: relative; 
-    font-size: 0.85rem; 
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
+    font-size: 0.9rem;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+}
+
+.event-details-box {
+    margin: 10px 0;
+    padding: 8px 0;
+    border-top: 1px solid rgba(194, 178, 128, 0.3);
+    border-bottom: 1px solid rgba(194, 178, 128, 0.3);
+}
+
+.event-details-box div {
+    margin-bottom: 4px;
 }
 
 .cal-event span { 
     background: #c2b280 !important; 
     color: #1a1c12 !important; 
-    padding: 1px 5px; 
+    padding: 3px 8px; 
     border-radius: 3px; 
-    font-size: 0.7rem; 
+    font-size: 0.75rem; 
     font-weight: bold; 
-    margin-right: 3px; 
-    margin-top: 4px; 
+    margin-right: 5px; 
+    margin-top: 5px; 
     display: inline-block; 
-    border: 1px solid #353b1a; 
 }
 
 .event-staff { 
@@ -242,7 +294,6 @@ input[type="checkbox"].item-check {
     cursor: pointer;
 }
 
-
 /* ============================================================
    [9] SIDEBAR SECURITY STYLES
    ============================================================ */
@@ -250,7 +301,6 @@ input[type="checkbox"].item-check {
     position: relative;
 }
 
-/* Blurs the content behind the lock */
 .sidebar.locked .sidebar-section, 
 .sidebar.locked .action-group,
 .sidebar.locked .sidebar-logo-container,
